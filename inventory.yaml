@@ -1,0 +1,13 @@
+all:
+  hosts:
+  children:
+    local:
+      hosts:
+        localhost_demo:
+          path: "{{ playbook_dir }}"
+    webservers:
+      hosts:
+        webserver1:
+          ansible_host: 192.168.1.101 # Replace with actual IP address or hostname
+        webserver2:
+          ansible_host: 192.168.1.102 # Replace with actual IP address or hostname

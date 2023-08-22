@@ -1,0 +1,170 @@
+- name: Set host_path variable
+  set_fact:
+    host_path: "{{ hostvars[inventory_hostname]['path'] }}"
+- name: Debug host path
+  debug:
+    var: host_path
+
+- name: Set Ansible configuration project path
+  set_fact:
+    ansible_config_project_path: "{{ playbook_dir }}"
+
+- name: Debug ansible_config_project_path
+  debug:
+    var: ansible_config_project_path
+
+- name: Read repo.yaml file
+  slurp:
+    src: "{{ host_path + '/repo.yaml' }}"
+  register: repo_yaml_content
+
+- name: Parse repo.yaml content
+  set_fact:
+    repo: "{{ repo_yaml_content.content | b64decode | from_yaml }}"
+
+- name: Debug YAMl data
+  debug:
+    var: repo
+
+- name: Debug message
+  debug:
+    msg: "Successful"
+
+- name: Set templates directory path
+  set_fact:
+    templates_dir: "{{ ansible_config_project_path + '/roles/local_repos/templates' }}"
+
+- name: Check if docs folder in host exists
+  stat:
+    path: "{{ host_path + '/docs' }}"
+  register: docs_folder
+  failed_when: False
+
+- name: Retrieve docs folder file details
+  block:
+    - name: Get list of files in the docs folder
+      find:
+        paths: "{{ host_path + '/docs' }}"
+        patterns: "*.*"
+      register: doc_files
+
+    - name: Debug doc_files
+      debug:
+        var: doc_files
+
+    - name: Create doc_files_array
+      set_fact:
+        doc_files_array: "{{ doc_files_array | default([]) + [{'file_name': item.path | basename, 'path': item.path}] }}"
+      loop: "{{ doc_files.files }}"
+
+    - name: Debug doc_files_array
+      debug:
+        var: doc_files_array
+  when: docs_folder.stat.exists
+
+- name: Check if README template file exists
+  stat:
+    path: "{{ templates_dir + '/README' + '.md.j2' }}"
+  register: readme_template_file
+
+# Below will be implemented when Markdown partials are supported
+#################################################################
+# - name: Render README when enabled
+#   block:
+#     - name: Creating readme_sections dictionary
+#       set_fact:
+#         readme_sections: "{{ readme_sections | default([]) + [item.value | combine({'section_key': item.key})] }}"
+#       loop: "{{ repo.readme.section | dict2items }}"
+
+#     - name: Debug readme_sections dictionary
+#       debug:
+#         var: readme_sections
+
+#     - name: Render README
+#       template:
+#         src: "{{ templates_dir + '/' + 'README.md.j2'}}"
+#         dest: "{{ host_path + '/' + 'README.md'}}"
+#       vars:
+#         doc_files: "{{ doc_files }}"
+#         readme_sections: "{{ readme_sections }}"
+#         repo: "{{ repo }}"
+#         host_path: "{{ host_path }}"
+#   when: repo.readme.enabled == true and readme_template_file.stat.exists
+
+# - name: Render README
+#   template:
+#     src: "{{ templates_dir + '/' + 'README.md.j2'}}"
+#     dest: "{{ host_path + '/' + 'README.md'}}"
+# INDENT BELOW:
+# vars:
+#   doc_files: "{{ doc_files }}"
+#   readme_sections: "{{ readme_sections }}"
+#   repo: "{{ repo }}"
+#   host_path: "{{ host_path }}"
+#################################################################
+
+- name: Check if CODEOWNERS template file exists
+  stat:
+    path: "{{ templates_dir + '/CODEOWNERS' + '.md.j2' }}"
+  register: codeowners_template_file
+
+- name: Check if CODE_OF_CONDUCT template file exists
+  stat:
+    path: "{{ templates_dir + '/CODE_OF_CONDUCT' + '.md.j2' }}"
+  register: code_of_conduct_template_file
+
+- name: Check if commit_template file exists
+  stat:
+    path: "{{ templates_dir + '/commit_template' + '.md.j2' }}"
+  register: commit_template_file
+
+- name: Check if PULL_REQUEST_TEMPLATE file exists
+  stat:
+    path: "{{ templates_dir + '/PULL_REQUEST_TEMPLATE' + '.md.j2' }}"
+  register: pull_request_template_file
+
+- name: Check if SECURITY template file exists
+  stat:
+    path: "{{ templates_dir + '/SECURITY' + '.md.j2' }}"
+  register: security_template_file
+
+- name: Generate files from templates
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - {
+        src: "{{ templates_dir + '/' + 'README.md.j2'}}",
+        dest: "{{ host_path + '/' + 'README.md'}}",
+        when: readme_template_file.stat.exists,
+      }
+    - {
+        src: "{{ templates_dir + '/licenses/' + repo.license + '.md.j2' }}",
+        dest: "{{ host_path + '/LICENSE.txt' }}",
+        when: repo.license is defined,
+      }
+    - {
+        src: "{{ templates_dir + '/CODEOWNERS' + '.md.j2' }}",
+        dest: "{{ host_path + '/CODEOWNERS.md' }}",
+        when: codeowners_template.stat.exists,
+      }
+    - {
+        src: "{{ templates_dir + '/CODE_OF_CONDUCT' + '.md.j2' }}",
+        dest: "{{ host_path + '/CODE_OF_CONDUCT.md' }}",
+        when: code_of_conduct_template.stat.exists,
+      }
+    - {
+        src: "{{ templates_dir + '/commit_template' + '.md.j2' }}",
+        dest: "{{ host_path + '/commit_template.txt' }}",
+        when: commit_template.stat.exists,
+      }
+    - {
+        src: "{{ templates_dir + '/PULL_REQUEST_TEMPLATE' + '.md.j2' }}",
+        dest: "{{ host_path + '/PULL_REQUEST_TEMPLATE.md' }}",
+        when: pull_request_template.stat.exists,
+      }
+    - {
+        src: "{{ templates_dir + '/SECURITY' + '.md.j2' }}",
+        dest: "{{ host_path + '/SECURITY.md' }}",
+        when: security_template.stat.exists,
+      }

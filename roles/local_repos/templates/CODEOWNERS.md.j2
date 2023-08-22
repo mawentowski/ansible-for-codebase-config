@@ -1,0 +1,16 @@
+# Code Owners
+
+The following individuals are designated as code owner(s) for specific files/directories in the repository:
+
+{% if repo.github_repo_owner is defined %}
+{{ repo.github_repo_owner }}
+{% endif %}
+{% if repo.codeowners is defined and repo.codeowners %}
+
+{% for path, owners in repo.codeowners.items() %}
+{{ path }}
+{% for owner in owners %}
+{{ owner }}
+{% endfor %}
+{% endfor %}
+{% endif %}

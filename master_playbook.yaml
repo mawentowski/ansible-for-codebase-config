@@ -1,0 +1,12 @@
+- name: Kick off local or webserver operations
+  hosts: all
+  gather_facts: false
+  connection: local
+
+  vars_files:
+    - "{{ playbook_dir }}/vars.yaml"
+
+  tasks:
+    - name: Include local repo file operations tasks
+      include_tasks: "{{ playbook_dir }}/roles/local_repos/tasks/main.yaml"
+      when: hostvars[inventory_hostname]['path'] is defined
