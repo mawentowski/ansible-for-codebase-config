@@ -37,7 +37,7 @@ As a newcomer to Ansible, my initial objective was to establish consistent boile
 
 My search for a basic project template featuring playbook-driven file generation, file templates, and customizable code base variables in a `repo.yaml` file was futile. I found official Ansible documentation less pragmatic and YouTube tutorials too narrow in scope.
 
-The Simple Ansible Playbook Starter was born from this predicament. It delivers a minimal configuration to kickstart Ansible utilization, with a primary focus on dynamic file generation. This template serves as a foundation for more complex Ansible configurations tailored to diverse use cases.
+The Ansible for Code Base Configuration was born from this predicament. It delivers a minimal configuration to kickstart Ansible utilization, with a primary focus on dynamic file generation. This template serves as a foundation for more complex Ansible configurations tailored to diverse use cases.
 
 To begin, define local hosts (repositories on your system) for testing purposes. Subsequently, configure `inventory.yaml` to extend these tasks to remote systems through SSH or other APIs.
 
@@ -69,11 +69,13 @@ Before installing Ansible, follow the general steps outlined in the [Ansible ins
    ```
 ### Run the Playbook
 
-Within the root directory, locate the `localhost_demo` folder, which represents a code base targeted by Ansible. This folder contains a `repo.yaml` file.
+By default, the host targetted by Ansible is *this* project.
 
-Examine `localhost_demo/repo.yaml` to find metadata such as `name`, `description`, and `license`.
+Examine `repo.yaml` to find metadata such as `name`, `description`, and `license`.
 
-Execute the following command to run the playbook and generate files for localhost_demo:
+Change each property property of this file to fit your new Ansible project.
+
+Run the following command to run the playbook and regenerate the project documentation located in the root:
 
 ```bash
 ansible-playbook master_playbook.yaml
@@ -81,9 +83,9 @@ ansible-playbook master_playbook.yaml
 
 ### View Generated Files
 
-Check the `localhost_demo` folder to observe the new files. The generated `README.md` contains the repository name, inserted based on the `repo.yaml` definition. Similarly, other files incorporate repository-specific details from `repo.yaml`.
+In the root, of the directory, open a file such as `CODEOWNERS`, and you'll notice the `github_repo_owner` you entered in `repo.yaml` is shown. Similarly, other files now incorporated your repository-specific details from `repo.yaml`, including this `README`!
 
-This showcases Ansible's ability to dynamically generate documentation.
+This showcases Ansible's ability to dynamically generate documentation based on YAML data.
 
 ## Project structure
 
@@ -149,7 +151,7 @@ Use this project as a template to create your own project to manage Ansible conf
 
 ### Set up hosts
 
-Ansible retrieves host details from inventory.yaml. The file contains two groups, local and webserver, with hosts and connection details. Modify this file to include the desired hosts for playbook execution.
+Ansible retrieves host details from `inventory.yaml`. The file contains two groups, local and webserver, with hosts and connection details. Modify this file to include the desired hosts for playbook execution.
 
 ### Configure `repo.yaml`
 
@@ -192,6 +194,7 @@ Jinja is employed in Markdown files with `.md.j2` extensions. Explore the [Jinja
 - [ ] Replace `.yaml` extensions with `.yml` per Ansible standards.
 - [ ] Output the CODEOWNERS file to a `.github` folder.
 - [ ] Implement automated Markdown TOC for the README.
+- [ ] Add instructions for common playbook tasks such detecting when a file exists and debugging
 
 ## Contributing
 
