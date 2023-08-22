@@ -179,13 +179,7 @@ ansible-playbook <your-playbook>.yaml
 
 ### Create Jinja templates
 
-In the `roles/local_repos/templates` folder, you'll find Jinja templates using syntax such as:
-
-```jinja
-mawentowski
-```
-
-Jinja is employed in Markdown files with `.md.j2` extensions. Explore the [Jinja Template Designer Documentation](https://jinja.palletsprojects.com/en/latest/templates/) for a deeper understanding.
+In the `roles/local_repos/templates` folder, Jinja syntax is employed in Markdown files with `.md.j2` extensions. Explore the [Jinja Template Designer Documentation](https://jinja.palletsprojects.com/en/latest/templates/) for a deeper understanding.
 
 ## Roadmap
 
@@ -202,7 +196,7 @@ Community contributions are appreciated. Report bugs, suggest improvements, or s
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE.txt) for more information.
 
 ## Contact
 
