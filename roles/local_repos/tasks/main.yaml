@@ -44,7 +44,7 @@
   block:
     - name: Get list of files in the docs folder
       find:
-        paths: "{{ host_path + '/docs' }}"
+        paths: "{{ host_path + '/docs/partials/' }}"
         patterns: "*.*"
       register: doc_files
 
@@ -67,42 +67,37 @@
     path: "{{ templates_dir + '/README' + '.md.j2' }}"
   register: readme_template_file
 
-# Below will be implemented when Markdown partials are supported
-#################################################################
-# - name: Render README when enabled
-#   block:
-#     - name: Creating readme_sections dictionary
-#       set_fact:
-#         readme_sections: "{{ readme_sections | default([]) + [item.value | combine({'section_key': item.key})] }}"
-#       loop: "{{ repo.readme.section | dict2items }}"
+- name: Render README when enabled
+  block:
+    - name: Creating readme_sections dictionary
+      set_fact:
+        readme_sections: "{{ readme_sections | default([]) + [item.value | combine({'section_key': item.key})] }}"
+      loop: "{{ repo.readme.section | dict2items }}"
 
-#     - name: Debug readme_sections dictionary
-#       debug:
-#         var: readme_sections
+    - name: Debug readme_sections dictionary
+      debug:
+        var: readme_sections
 
-#     - name: Render README
-#       template:
-#         src: "{{ templates_dir + '/' + 'README.md.j2'}}"
-#         dest: "{{ host_path + '/' + 'README.md'}}"
-#       vars:
-#         doc_files: "{{ doc_files }}"
-#         readme_sections: "{{ readme_sections }}"
-#         repo: "{{ repo }}"
-#         host_path: "{{ host_path }}"
-#   when: repo.readme.enabled == true and readme_template_file.stat.exists
+    - name: Render README
+      template:
+        src: "{{ templates_dir + '/' + 'README.md.j2'}}"
+        dest: "{{ host_path + '/' + 'README.md'}}"
+      vars:
+        doc_files: "{{ doc_files }}"
+        readme_sections: "{{ readme_sections }}"
+        repo: "{{ repo }}"
+        host_path: "{{ host_path }}"
+  when: repo.readme.enabled == true and readme_template_file.stat.exists
 
-# - name: Render README
-#   template:
-#     src: "{{ templates_dir + '/' + 'README.md.j2'}}"
-#     dest: "{{ host_path + '/' + 'README.md'}}"
-# INDENT BELOW:
-# vars:
-#   doc_files: "{{ doc_files }}"
-#   readme_sections: "{{ readme_sections }}"
-#   repo: "{{ repo }}"
-#   host_path: "{{ host_path }}"
-#################################################################
-
+- name: Render README
+  template:
+    src: "{{ templates_dir + '/' + 'README.md.j2'}}"
+    dest: "{{ host_path + '/' + 'README.md'}}"
+  # vars:
+  #   doc_files: "{{ doc_files }}"
+  #   readme_sections: "{{ readme_sections }}"
+  #   repo: "{{ repo }}"
+  #   host_path: "{{ host_path }}"
 - name: Check if CODEOWNERS template file exists
   stat:
     path: "{{ templates_dir + '/CODEOWNERS' + '.md.j2' }}"
@@ -115,7 +110,7 @@
 
 - name: Check if commit_template file exists
   stat:
-    path: "{{ templates_dir + '/commit_template' + '.md.j2' }}"
+    path: "{{ templates_dir + '/repo_commit.template' + '.j2' }}"
   register: commit_template_file
 
 - name: Check if PULL_REQUEST_TEMPLATE file exists
@@ -154,8 +149,8 @@
         when: code_of_conduct_template.stat.exists,
       }
     - {
-        src: "{{ templates_dir + '/commit_template' + '.md.j2' }}",
-        dest: "{{ host_path + '/commit_template.txt' }}",
+        src: "{{ templates_dir + '/repo_commit.template' + '.j2' }}",
+        dest: "{{ host_path + '/repo_commit.template' }}",
         when: commit_template.stat.exists,
       }
     - {

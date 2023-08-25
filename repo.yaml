@@ -7,13 +7,57 @@ website: https://github.com/mawentowski/ansible-for-codebase-config
 github_repo_owner: mawentowski
 type: application
 codeowners:
-  /src/app:
-    - mawentowski
-    - mawentowski
-  /tests:
+  /:
     - mawentowski
   /docs:
+    - mawentowski
     - mawentowski
 contact:
   name: Mark Wentowski
   email: mawentowskigit@gmail.com
+readme:
+  section:
+    about:
+      title: "About the project"
+      content: |
+        While Ansible is often associated with server configuration, its potential extends to automating documentation by utilizing Jinja templating. Ansible's support for injecting variables from sources like YAML makes it a valuable tool for generating files and content specific to each code repository.
+
+        As a newcomer to Ansible, my initial objective was to establish consistent boilerplate files such as a `README`, `CODE_OF_CONDUCT`, `CODEOWNERS`, and `SECURITY` across my repositories. This involved maintaining uniformity while incorporating dynamic repository-specific content during playbook execution.
+
+        My search for a basic project template featuring playbook-driven file generation, file templates, and customizable code base variables in a `repo.yaml` file was futile. I found official Ansible documentation less pragmatic and YouTube tutorials too narrow in scope.
+
+        The Ansible for Code Base Configuration was born from this predicament. It delivers a minimal configuration to kickstart Ansible utilization, with a primary focus on dynamic file generation. This template serves as a foundation for more complex Ansible configurations tailored to diverse use cases.
+
+        To begin, define local hosts (repositories on your system) for testing purposes. Subsequently, configure `inventory.yaml` to extend these tasks to remote systems through SSH or other APIs.
+      after: |
+        ## Features
+
+        - **Consistent Documentation:** Generate standardized files across repositories for a uniform codebase.
+        - **Dynamic Templating:** Inject dynamic content using Ansible's Jinja templating for personalized documentation.
+        - **Custom Repository Details:** Define unique attributes like name and license in `repo.yaml` for easy customization.
+        - **Local Testing:** Simulate repository configurations locally, facilitating pre-deployment checks.
+        - **Version Control Integration:** Include generated files in version control, keeping documentation in sync with code.
+    installation:
+      title: "Installation"
+      before: |
+        ### Prerequisites
+
+        Before installing Ansible, follow the general steps outlined in the [Ansible installation guidelines](https://docs.ansible.com/ansible/latest/installation_guide/index.html), tailored to your operating system.
+    configuration:
+      title: "Configuration"
+    usage:
+      title: "Usage"
+    todo:
+      - text: Implement schema validation of `repo.yaml`.
+        state: open
+      - text: Add support for inserting partial Markdown files stored within a `/docs` folder referenced by `repo.yaml` for extensive documentation.
+        state: open
+      - text: Replace `.yaml` extensions with `.yml` per Ansible standards.
+        state: open
+      - text: Output the CODEOWNERS file to a `.github` folder.
+        state: open
+      - text: Implement automated Markdown TOC for the README.
+        state: open
+      - text: Add instructions for common playbook tasks such detecting when a file exists and debugging.
+        state: open
+  enabled: true

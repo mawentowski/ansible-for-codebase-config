@@ -3,33 +3,7 @@ Ansible for Code Base Configuration
 
 Ansible for Code Base Configuration simplifies managing code base documentation and files by leveraging Ansible's dynamic templating capabilities.
 
-## Table of contents
-
-- [About the Project](#about-the-project)
-- [Features](#features)
-- [Getting Started](#getting-started)
-   - [Prerequisites](#prerequisites)
-   - [Clone the Repository](#clone-the-repository)
-   - [Run the Playbook](#run-the-playbook)
-   - [View Generated Files](#view-generated-files)
-- [Project structure](#project-structure)
-- [Usage](#usage)
-   - [Run playbook on all hosts](#run-playbook-on-all-hosts)
-   - [Optional: Specifying an Inventory File](#optional-specifying-an-inventory-file)
-   - [Run playbook on all hosts in specific group](#run-playbook-on-all-hosts-in-specific-group)
-   - [Run playbook on specific host](#run-playbook-on-specific-host)
-- [Configuration](#configuration)
-   - [Set up hosts](#set-up-hosts)
-   - [Configure `repo.yaml`](#configure-repoyaml)
-   - [Optional: Set default inventory file in `ansible.cfg`](#optional-set-default-inventory-file-in-ansiblecfg)
-   - [Create playbooks](#create-playbooks)
-   - [Create Jinja templates](#create-jinja-templates)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-
-## About the Project
+## About the project 
 
 While Ansible is often associated with server configuration, its potential extends to automating documentation by utilizing Jinja templating. Ansible's support for injecting variables from sources like YAML makes it a valuable tool for generating files and content specific to each code repository.
 
@@ -40,7 +14,7 @@ My search for a basic project template featuring playbook-driven file generation
 The Ansible for Code Base Configuration was born from this predicament. It delivers a minimal configuration to kickstart Ansible utilization, with a primary focus on dynamic file generation. This template serves as a foundation for more complex Ansible configurations tailored to diverse use cases.
 
 To begin, define local hosts (repositories on your system) for testing purposes. Subsequently, configure `inventory.yaml` to extend these tasks to remote systems through SSH or other APIs.
-
+ 
 ## Features
 
 - **Consistent Documentation:** Generate standardized files across repositories for a uniform codebase.
@@ -48,14 +22,14 @@ To begin, define local hosts (repositories on your system) for testing purposes.
 - **Custom Repository Details:** Define unique attributes like name and license in `repo.yaml` for easy customization.
 - **Local Testing:** Simulate repository configurations locally, facilitating pre-deployment checks.
 - **Version Control Integration:** Include generated files in version control, keeping documentation in sync with code.
-
-## Getting Started
+ 
+## Getting started
 
 ### Prerequisites
 
 Before installing Ansible, follow the general steps outlined in the [Ansible installation guidelines](https://docs.ansible.com/ansible/latest/installation_guide/index.html), tailored to your operating system.
-
-### Clone the Repository
+ 
+### Installation 
 
 1. Clone the repository:
 
@@ -67,9 +41,10 @@ Before installing Ansible, follow the general steps outlined in the [Ansible ins
    ```bash
    cd ansible-for-codebase-config
    ```
+
 ### Run the Playbook
 
-By default, the host targetted by Ansible is *this* project.
+By default, the host targetted by Ansible is _this_ project.
 
 Examine `repo.yaml` to find metadata such as `name`, `description`, and `license`.
 
@@ -95,7 +70,7 @@ Take a moment to familiarize yourself with the project structure:
 root
 ├─ localhost_demo                          # Sample local repo targetted by the playbook
 ├─ roles                                   # Used to organize playbook, tasks, and templates
-│  └─ local_repos                          # Role specific to hosts on a local machine               
+│  └─ local_repos                          # Role specific to hosts on a local machine
 │     ├─ tasks                             # Tasks the role performs
 │     └─ templates                         # Role-specific Jinja templates containing variables
 ├─ ansible.cfg                             # Ansible configuration file
@@ -103,6 +78,42 @@ root
 ├─ master_playbook.yaml                    # Main playbook that triggers role-specific tasks
 └─ repo.yaml                               # File defining variables inserted into templates
 ```
+
+## Configuration
+
+Use this project as a template to create your own project to manage Ansible configurations.
+
+### Set up hosts
+
+Ansible retrieves host details from `inventory.yaml`. The file contains two groups, local and webserver, with hosts and connection details. Modify this file to include the desired hosts for playbook execution.
+
+### Configure `repo.yaml`
+
+`repo.yaml` holds configuration data for a project. Defined variables are utilized within Ansible playbooks to influence tasks and templates. Update this file with values pertinent to your project.
+
+### Optional: Set default inventory file in `ansible.cfg`
+
+Change the default inventory file in `ansible.cfg`:
+
+For example:
+
+```shell
+inventory = ./<your-inventory-file>.yaml
+```
+
+### Create playbooks
+
+Refer to the official [Using Ansible playbooks](https://docs.ansible.com/ansible/latest/playbook_guide/index.html) guide for comprehensive details on creating Ansible playbooks.
+
+Execute a playbook using the following command:
+
+```shell
+ansible-playbook <your-playbook>.yaml
+```
+
+### Create Jinja templates
+
+In the `roles/local_repos/templates` folder, Jinja syntax is employed in Markdown files with `.md.j2` extensions. Explore the [Jinja Template Designer Documentation](https://jinja.palletsprojects.com/en/latest/templates/) for a deeper understanding.
 
 ## Usage
 
@@ -145,54 +156,18 @@ To run a playbook on a specific host, pass a `limit` argument followed by the na
 ansible-playbook --limit localhost_demo master_playbook.yaml
 ```
 
-## Configuration
-
-Use this project as a template to create your own project to manage Ansible configurations.
-
-### Set up hosts
-
-Ansible retrieves host details from `inventory.yaml`. The file contains two groups, local and webserver, with hosts and connection details. Modify this file to include the desired hosts for playbook execution.
-
-### Configure `repo.yaml`
-
-`repo.yaml` holds configuration data for a project. Defined variables are utilized within Ansible playbooks to influence tasks and templates. Update this file with values pertinent to your project.
-
-### Optional: Set default inventory file in `ansible.cfg`
-
-Change the default inventory file in `ansible.cfg`:
-
-For example:
-
-```shell
-inventory = ./<your-inventory-file>.yaml
-```
-
-### Create playbooks
-
-Refer to the official [Using Ansible playbooks](https://docs.ansible.com/ansible/latest/playbook_guide/index.html) guide for comprehensive details on creating Ansible playbooks.
-
-Execute a playbook using the following command:
-
-```shell
-ansible-playbook <your-playbook>.yaml
-```
-
-### Create Jinja templates
-
-In the `roles/local_repos/templates` folder, Jinja syntax is employed in Markdown files with `.md.j2` extensions. Explore the [Jinja Template Designer Documentation](https://jinja.palletsprojects.com/en/latest/templates/) for a deeper understanding.
-
 ## Roadmap
 
-- [ ] Implement schema validation of `repo.yaml`
+- [ ] Implement schema validation of `repo.yaml`.
 - [ ] Add support for inserting partial Markdown files stored within a `/docs` folder referenced by `repo.yaml` for extensive documentation.
 - [ ] Replace `.yaml` extensions with `.yml` per Ansible standards.
 - [ ] Output the CODEOWNERS file to a `.github` folder.
 - [ ] Implement automated Markdown TOC for the README.
-- [ ] Add instructions for common playbook tasks such detecting when a file exists and debugging
+- [ ] Add instructions for common playbook tasks such detecting when a file exists and debugging.
 
 ## Contributing
 
-Community contributions are appreciated. Report bugs, suggest improvements, or submit code changes by forking the repository and creating a pull request
+Community contributions are appreciated. Report bugs, suggest improvements, or submit code changes by forking the repository and creating a pull request.
 
 ## License
 
@@ -201,5 +176,3 @@ Distributed under the MIT License. See [LICENSE](LICENSE.txt) for more informati
 ## Contact
 
 - Mark Wentowski (project owner) - <mawentowskigit@gmail.com>
-
-
