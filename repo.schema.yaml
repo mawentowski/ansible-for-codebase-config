@@ -1,0 +1,102 @@
+type: object
+description: reprime.yaml structure for LinkORB
+required: [name, description, type]
+additionalProperties: false
+properties:
+  name:
+    type: string
+    description: Repository name
+    pattern: ^[a-z0-9-]+$
+    minLength: 1
+    maxLength: 50
+  display_name:
+    type: string
+  description:
+    type: string
+    description: Repository description
+  license:
+    type: string
+    description: Repository license
+    default: mit
+    enum:
+      - mit
+      - gpl-v3
+      - proprietary
+  website:
+    type: string
+    description: URL of main website of repository owner.
+    default: docksgeek.io
+  github_repo_owner:
+    type: string
+    description: GitHub repository owner.
+    default: mawentowski
+  codeowners:
+    description: List of object that contain pattern and owner properties for CODEOWNERS file generation
+    type: object
+    patternProperties:
+      "^/.*$":
+        type: array
+        items:
+          type: string
+  type:
+    type: string
+    description: Repository type
+    default: application
+    enum:
+      - application
+      - library
+      - other
+  visibility:
+    type: string
+    description: Repository visibility
+    default: public
+    enum:
+      - public
+      - private
+  contact:
+    type: object
+    properties:
+      name:
+        type: string
+        default: Mark Wentowski
+      email:
+        type: string
+        default: mawentowskigit@gmail.com
+  readme:
+    type: object
+    properties:
+      sections:
+        type: object
+        properties:
+          about:
+            $ref: "#/definitions/section"
+          installation:
+            $ref: "#/definitions/section"
+          configuration:
+            $ref: "#/definitions/section"
+          usage:
+            $ref: "#/definitions/section"
+          todo:
+            type: array
+            items:
+              type: object
+              properties:
+                text:
+                  type: string
+                state:
+                  type: string
+                  enum:
+                    - open
+                    - closed
+definitions:
+  section:
+    type: object
+    properties:
+      title:
+        type: string
+      content:
+        type: string
+      after:
+        type: string
+      before:
+        type: string

@@ -11,32 +11,32 @@
 {#################################################}
 {#################### ABOUT ######################}
 {#################################################}
-{% if repo.readme.section.about is defined %}
+{% if repo.readme.sections.about is defined %}
 {################# about.before ##################}
 {% set markdown_file_path =  markdown_file_path_prefix + 'about.before.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.about.before is defined %}
-{{ repo.readme.section.about.before }} 
+{% elif repo.readme.sections.about.before is defined %}
+{{ repo.readme.sections.about.before }} 
 {% else %}
 {% endif %}
 {################# about.content #################}
 {% set markdown_file_path =  markdown_file_path_prefix + 'about.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.about.content is defined %}
+{% elif repo.readme.sections.about.content is defined %}
 
-## {{ repo.readme.section.about.title }} 
+## {{ repo.readme.sections.about.title }} 
 
-{{ repo.readme.section.about.content }} 
+{{ repo.readme.sections.about.content }} 
 {% else %}
 {% endif %}
 {################# about.after ###################}
 {% set markdown_file_path =  markdown_file_path_prefix + 'about.after.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.about.after is defined %}
-{{ repo.readme.section.about.after }} 
+{% elif repo.readme.sections.about.after is defined %}
+{{ repo.readme.sections.about.after }} 
 {% else %}
 {% endif %}
 {% endif %}
@@ -49,12 +49,12 @@
 {% set markdown_file_path =  markdown_file_path_prefix + 'installation.before.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.installation.before is defined %}
-{{ repo.readme.section.installation.before }} 
+{% elif repo.readme.sections.installation.before is defined %}
+{{ repo.readme.sections.installation.before }} 
 {% else %}
 {% endif %}
 {#################################################}
-### {{ repo.readme.section.installation.title }} 
+### {{ repo.readme.sections.installation.title }} 
 
 1. Clone the repository:
 
@@ -71,20 +71,20 @@
 {% set markdown_file_path =  markdown_file_path_prefix + 'installation.after.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.installation.after is defined %}
-{{ repo.readme.section.installation.after }} 
+{% elif repo.readme.sections.installation.after is defined %}
+{{ repo.readme.sections.installation.after }} 
 {% else %}
 {% endif %}
 {#################################################}
 {################ CONFIGURATION ##################}
 {#################################################}
-{% if repo.readme.section.configuration is defined %}
+{% if repo.readme.sections.configuration is defined %}
 {############# configuration.before ##############}
 {% set markdown_file_path =  markdown_file_path_prefix + 'configuration.before.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.configuration.before is defined %}
-{{ repo.readme.section.configuration.before }} 
+{% elif repo.readme.sections.configuration.before is defined %}
+{{ repo.readme.sections.configuration.before }} 
 {% else %}
 {% endif %}
 {############# configuration.content #############}
@@ -92,32 +92,32 @@
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.configuration.content is defined %}
+{% elif repo.readme.sections.configuration.content is defined %}
 
-## {{ repo.readme.section.configuration.title }} 
+## {{ repo.readme.sections.configuration.title }} 
 
-{{ repo.readme.section.configuration.content }} 
+{{ repo.readme.sections.configuration.content }} 
 {% else %}
 {% endif %}
 {############## configuration.after ##############}
 {% set markdown_file_path =  markdown_file_path_prefix + 'configuration.after.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.configuration.after is defined %}
-{{ repo.readme.section.configuration.after }} 
+{% elif repo.readme.sections.configuration.after is defined %}
+{{ repo.readme.sections.configuration.after }} 
 {% else %}
 {% endif %}
 {% endif %}
 {#################################################}
 {#################### USAGE ######################}
 {#################################################}
-{% if repo.readme.section.usage is defined %}
+{% if repo.readme.sections.usage is defined %}
 {################# usage.before ##################}
 {% set markdown_file_path =  markdown_file_path_prefix + 'usage.before.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.usage.before is defined %}
-{{ repo.readme.section.usage.before }} 
+{% elif repo.readme.sections.usage.before is defined %}
+{{ repo.readme.sections.usage.before }} 
 {% else %}
 {% endif %}
 {################# usage.content #################}
@@ -125,30 +125,30 @@
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.usage.content is defined %}
+{% elif repo.readme.sections.usage.content is defined %}
 
-## {{ repo.readme.section.usage.title }} 
+## {{ repo.readme.sections.usage.title }} 
 
-{{ repo.readme.section.usage.content }} 
+{{ repo.readme.sections.usage.content }} 
 {% else %}
 {% endif %}
 {################## usage.after ##################}
 {% set markdown_file_path =  markdown_file_path_prefix + 'usage.after.md' %}
 {% if markdown_file_path in doc_files_array | map(attribute='path') %}
 {{ lookup('file', markdown_file_path) }}
-{% elif repo.readme.section.usage.after is defined %}
-{{ repo.readme.section.usage.after }} 
+{% elif repo.readme.sections.usage.after is defined %}
+{{ repo.readme.sections.usage.after }} 
 {% else %}
 {% endif %}
 {% endif %}
 {#################################################}
 {###################  ROADMAP ####################}
 {#################################################}
-{% if repo.readme.section.todo is defined %}
+{% if repo.readme.sections.todo is defined %}
 
 ## Roadmap
 
-{% for todo in repo.readme.section.todo %}
+{% for todo in repo.readme.sections.todo %}
 - [{% if todo.state=="closed" %}x{% else %} {% endif %}] {{ todo.text }}
 {% endfor %}
 {% endif %}

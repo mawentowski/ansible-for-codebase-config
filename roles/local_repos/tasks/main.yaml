@@ -8,27 +8,41 @@
 - name: Set Ansible configuration project path
   set_fact:
     ansible_config_project_path: "{{ playbook_dir }}"
+- name: Debug ansible_config_project_path
+  debug:
+    var: ansible_config_project_path
+
+- name: Set Ansible configuration project path
+  set_fact:
+    ansible_config_project_path: "{{ playbook_dir }}"
 
 - name: Debug ansible_config_project_path
   debug:
     var: ansible_config_project_path
 
-- name: Read repo.yaml file
-  slurp:
-    src: "{{ host_path + '/repo.yaml' }}"
-  register: repo_yaml_content
+- name: merge repo.yaml data with defaults
+  ansible.builtin.command: "./repo_data.py {{ host_path }}/repo.yaml"
+  register: repo_data
+  changed_when: false
 
-- name: Parse repo.yaml content
-  set_fact:
-    repo: "{{ repo_yaml_content.content | b64decode | from_yaml }}"
+- name: "set variables: repo, criteria, repo_managed"
+  ansible.builtin.set_fact:
+    repo: "{{ repo_data.stdout | from_json }}"
+    criteria: "{{ lookup('ansible.builtin.file', './repo.schema.yaml') | from_yaml }}"
+    repo_managed: "Managed by https://github.com/linkorb/repo-ansible. Manual changes will be overwritten."
 
-- name: Debug YAMl data
+- name: debug repo
   debug:
     var: repo
 
-- name: Debug message
-  debug:
-    msg: "Successful"
+- name: validate repo config in json format using jsonschema by passing plugin configuration variable as key/value pairs
+  ansible.builtin.set_fact:
+    config_validity: "{{ repo|ansible.utils.validate(criteria, engine='ansible.utils.jsonschema', draft='draft7') }}"
+
+- when: config_validity[0].message is defined
+  name: fail on schema validation error
+  ansible.builtin.fail:
+    msg: "The repo.yaml file is invalid: {{ config_validity[0].message }}. Please refer to the README.md for information about schema validation."
 
 - name: Set templates directory path
   set_fact:
@@ -72,7 +86,7 @@
     - name: Creating readme_sections dictionary
       set_fact:
         readme_sections: "{{ readme_sections | default([]) + [item.value | combine({'section_key': item.key})] }}"
-      loop: "{{ repo.readme.section | dict2items }}"
+      loop: "{{ repo.readme.sections | dict2items }}"
 
     - name: Debug readme_sections dictionary
       debug:
@@ -88,16 +102,10 @@
         repo: "{{ repo }}"
         host_path: "{{ host_path }}"
   when: repo.readme.enabled == true and readme_template_file.stat.exists
-
 - name: Render README
   template:
     src: "{{ templates_dir + '/' + 'README.md.j2'}}"
     dest: "{{ host_path + '/' + 'README.md'}}"
-  # vars:
-  #   doc_files: "{{ doc_files }}"
-  #   readme_sections: "{{ readme_sections }}"
-  #   repo: "{{ repo }}"
-  #   host_path: "{{ host_path }}"
 - name: Check if CODEOWNERS template file exists
   stat:
     path: "{{ templates_dir + '/CODEOWNERS' + '.md.j2' }}"

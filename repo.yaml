@@ -1,22 +1,14 @@
 name: ansible-for-codebase-config
 display_name: "Ansible for Code Base Configuration"
 description: "Ansible for Code Base Configuration simplifies managing code base documentation and files by leveraging Ansible's dynamic templating capabilities."
-license: mit
-visibility: public
-website: https://github.com/mawentowski/ansible-for-codebase-config
-github_repo_owner: mawentowski
-type: application
 codeowners:
   /:
     - mawentowski
   /docs:
     - mawentowski
     - mawentowski
-contact:
-  name: Mark Wentowski
-  email: mawentowskigit@gmail.com
 readme:
-  section:
+  sections:
     about:
       title: "About the project"
       content: |
