@@ -1,5 +1,7 @@
 ## Usage
 
+<!-- To do playbook checkout to clone github repos, your SSH agent must be running and attached to your SSH key, as described here: /Users/mawentowski/Repos/notes/coding-notes/ssh-agent.md -->
+
 ### Run playbook on all hosts
 
 To execute the playbook on all hosts within all groups, use the following command:

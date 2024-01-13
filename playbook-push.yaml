@@ -1,0 +1,14 @@
+- hosts: all
+  connection: local
+  strategy: free
+  gather_facts: false
+  vars:
+    cloned_repos_local_folder_path: "{{ lookup('env', 'REPO_ANSIBLE_BASE_PATH') or (playbook_dir + '/workspace/') }}"
+    cloned_repo_path: "{{ cloned_repos_local_folder_path }}/{{ inventory_hostname }}"
+    # github_token: "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"
+    organization: "mawentowski"
+  tasks:
+    - import_tasks: roles/github/tasks/push.yaml
+#  ansible-playbook -i generated-inventory.ini playbook-checkout.yaml
+#  ansible-playbook -i generated-inventory.ini playbook-push.yaml
+
